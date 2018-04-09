@@ -159,6 +159,8 @@ public class File
      */
     private transient PathStatus status = null;
 
+
+
     /**
      * Check if the file has an invalid path. Currently, the inspection of
      * a file path is very limited, and it only covers Nul character check.

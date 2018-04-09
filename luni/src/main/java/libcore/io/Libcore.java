@@ -20,4 +20,5 @@ public final class Libcore {
     private Libcore() { }
 
     public static Os os = new BlockGuardOs(new Posix());
+
 }

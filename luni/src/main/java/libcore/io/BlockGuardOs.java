@@ -59,6 +59,7 @@ public class BlockGuardOs extends ForwardingOs {
         }
     }
 
+
     @Override public FileDescriptor accept(FileDescriptor fd, SocketAddress peerAddress) throws ErrnoException, SocketException {
         BlockGuard.getThreadPolicy().onNetwork();
         return tagSocket(os.accept(fd, peerAddress));

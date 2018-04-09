@@ -25,7 +25,12 @@
  */
 
 package java.lang;
+
+import libcore.io.ExceptionTrack;
+import libcore.io.Libcore;
+
 import  java.io.*;
+import java.lang.reflect.Array;
 import  java.util.*;
 
 /**
@@ -129,6 +134,7 @@ public class Throwable implements Serializable {
      * @serial
      */
     private String detailMessage;
+
 
 
     /**
@@ -239,6 +245,8 @@ public class Throwable implements Serializable {
      * the stack trace data in the newly created throwable.
      */
     public Throwable() {
+        /**LeaseOS change**/
+        ExceptionTrack.getInstance().noteException();
         fillInStackTrace();
     }
 
@@ -254,6 +262,9 @@ public class Throwable implements Serializable {
      *          later retrieval by the {@link #getMessage()} method.
      */
     public Throwable(String message) {
+        /**LeaseOS change**/
+        ExceptionTrack.getInstance().noteException();
+
         fillInStackTrace();
         detailMessage = message;
     }
@@ -299,6 +310,7 @@ public class Throwable implements Serializable {
      * @since  1.4
      */
     public Throwable(Throwable cause) {
+
         fillInStackTrace();
         detailMessage = (cause==null ? null : cause.toString());
         this.cause = cause;
@@ -756,6 +768,7 @@ public class Throwable implements Serializable {
         }
     }
 
+
     /**
      * Fills in the execution stack trace. This method records within this
      * {@code Throwable} object information about the current state of
@@ -774,6 +787,7 @@ public class Throwable implements Serializable {
             backtrace = nativeFillInStackTrace();
             stackTrace = libcore.util.EmptyArray.STACK_TRACE_ELEMENT;
         }
+
         return this;
     }
 
