@@ -32,6 +32,7 @@ import java.lang.ref.WeakReference;
 import java.security.AccessController;
 import java.security.AccessControlContext;
 import java.security.PrivilegedAction;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1814,6 +1815,32 @@ class Thread implements Runnable {
         return State.values()[nativeGetStatus(started)];
     }
 
+
+    public interface ExceptionNoteHandler {
+        /**
+         * Method invoked when the given thread terminates due to the
+         * given uncaught exception.
+         * <p>Any exception thrown by this method will be ignored by the
+         * Java Virtual Machine.
+         * @param e the exception
+         */
+        void exceptionNote(int uid, Throwable e);
+    }
+
+
+    // null unless explicitly set
+    private volatile ExceptionNoteHandler exceptionNoteHandler;
+
+    // null unless explicitly set
+    private static volatile ExceptionNoteHandler defaultExceptionNoteHandler;
+
+    public static void setDefaultExceptionNoteHandler(ExceptionNoteHandler eh) {
+        defaultExceptionNoteHandler = eh;
+    }
+
+    public static ExceptionNoteHandler getDefaultExceptionNoteHandler(){
+        return defaultExceptionNoteHandler;
+    }
     // Added in JSR-166
 
     /**
@@ -1850,11 +1877,14 @@ class Thread implements Runnable {
         void uncaughtException(Thread t, Throwable e);
     }
 
+
+
     // null unless explicitly set
     private volatile UncaughtExceptionHandler uncaughtExceptionHandler;
 
     // null unless explicitly set
     private static volatile UncaughtExceptionHandler defaultUncaughtExceptionHandler;
+
 
     /**
      * Set the default handler invoked when a thread abruptly terminates

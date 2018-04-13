@@ -26,12 +26,20 @@
 
 package java.lang;
 
-import libcore.io.ExceptionTrack;
 import libcore.io.Libcore;
 
-import  java.io.*;
-import java.lang.reflect.Array;
-import  java.util.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * The {@code Throwable} class is the superclass of all errors and
@@ -246,7 +254,12 @@ public class Throwable implements Serializable {
      */
     public Throwable() {
         /**LeaseOS change**/
-        ExceptionTrack.getInstance().noteException();
+        java.lang.Thread.ExceptionNoteHandler handler = Thread.getDefaultExceptionNoteHandler();
+        if (handler == null) {
+            System.out.println("The handler is null");
+        } else {
+            handler.exceptionNote(Libcore.os.getuid(), this);
+        }
         fillInStackTrace();
     }
 
@@ -263,8 +276,13 @@ public class Throwable implements Serializable {
      */
     public Throwable(String message) {
         /**LeaseOS change**/
-        ExceptionTrack.getInstance().noteException();
 
+        java.lang.Thread.ExceptionNoteHandler handler = Thread.getDefaultExceptionNoteHandler();
+        if (handler == null) {
+            System.out.println("The handler is null");
+        } else {
+            handler.exceptionNote(Libcore.os.getuid(), this);
+        }
         fillInStackTrace();
         detailMessage = message;
     }
