@@ -478,7 +478,7 @@ public final class Integer extends Number implements Comparable<Integer> {
          * before IntegerCache is initialized. Care must be taken to not use
          * the valueOf method.
          */
-
+        System.out.printf("The string is %s", s);
         if (s == null) {
             throw new NumberFormatException("null");
         }
